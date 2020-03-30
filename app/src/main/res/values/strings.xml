@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ToDoManager</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+</resources>
