@@ -13,6 +13,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     CheckBox checkBox;
     TaskClickListener listener;
     Task task;
+    int position;
 
     public MainViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -21,7 +22,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onTaskClick(task,getAdapterPosition());
+                listener.onTaskClick(position);
             }
         });
     }

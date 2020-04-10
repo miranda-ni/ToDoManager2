@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity implements TaskClickListener
 
     RecyclerView recyclerView;
     MainAdapter adapter;
-    Integer position;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,34 +28,21 @@ public class MainActivity extends AppCompatActivity implements TaskClickListener
 
     public void onCreateTask(View view) {
         Intent intent = new Intent(this, CreateTaskActivity.class);
-        startActivityForResult(intent, 42);
+        startActivity(intent);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 42) {
-            if (resultCode == RESULT_OK) {
-                Task task = (Task) data.getSerializableExtra("task");
-                adapter.addTask(task);
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Task creation canceled", Toast.LENGTH_SHORT).show();
-            }
-        }else if (requestCode == 2){
-            if (resultCode == RESULT_OK) {
-                Task task = (Task) data.getSerializableExtra("editedTask");
-                adapter.updateTask(position,task);
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Task creation canceled", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     @Override
-    public void onTaskClick(Task task,Integer position) {
+    public void onTaskClick(int position) {
         this.position = position;
         Intent intent = new Intent(this, TaskDetailsActivity.class);
-        intent.putExtra("task", task);
-        startActivityForResult(intent,2);
+        intent.putExtra("task", position);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 }

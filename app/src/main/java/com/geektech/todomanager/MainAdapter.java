@@ -11,18 +11,10 @@ import java.util.ArrayList;
 
 public class MainAdapter extends RecyclerView.Adapter<MainViewHolder> {
 
-    ArrayList<Task> data = new ArrayList<>();
+
     TaskClickListener listener;
 
-    public void addTask(Task task) {
-        data.add(task);
-        notifyDataSetChanged();
-    }
 
-    public void updateTask(Integer position,Task task){
-        data.set(position,task);
-        notifyDataSetChanged();
-    }
     @NonNull
     @Override
     public MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,13 +27,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-        holder.task = data.get(position);
-        holder.textView.setText((position + 1) + ") " + data.get(position).title);
-        holder.checkBox.setChecked(data.get(position).isDone);
+        holder.task = TaskHolder.tasks.get(position);
+        holder.textView.setText((position + 1) + ") " + TaskHolder.tasks.get(position).title);
+        holder.checkBox.setChecked(TaskHolder.tasks.get(position).isDone);
+
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return TaskHolder.tasks.size();
     }
 }

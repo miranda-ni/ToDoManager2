@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -27,6 +28,8 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     Calendar calendar = Calendar.getInstance();
     DatePickerDialog picker;
+    Task task;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,33 @@ public class CreateTaskActivity extends AppCompatActivity {
         save = findViewById(R.id.edit_task_save);
         cancel = findViewById(R.id.edit_task_cancel);
         deadlineText = findViewById(R.id.edit_task_deadline_text);
+
+
+        Intent intent = getIntent();
+        if (intent !=null){
+            position = intent.getIntExtra("task",42);
+            if (position != 42){
+                task = TaskHolder.tasks.get(position);
+                taskDeadline = task.deadline;
+                title.setText(task.title);
+                description.setText(task.description);
+                SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+                deadlineText.setText(format.format(task.deadline));
+            }else {
+                createTask();
+            }
+        }else {
+            createTask();
+        }
+
+
+
+
+    }
+    void createTask(){
+        task = new Task();
+        task.startDate = new Date();
+        task.isDone = false;
     }
 
     public void onChooseDate(View view) {
@@ -69,17 +99,20 @@ public class CreateTaskActivity extends AppCompatActivity {
             return;
         }
 
-        Task task = new Task();
         task.deadline = taskDeadline;
         task.title = taskTitle;
         task.description = taskDescription;
-        task.startDate = new Date();
-        task.isDone = false;
 
-        Intent intent = new Intent();
-        intent.putExtra("task", task);
-        setResult(RESULT_OK, intent);
-        finish();
+        if (position == 42){
+            TaskHolder.tasks.add(task);
+
+        }else {
+            TaskHolder.tasks.remove(position);
+            TaskHolder.tasks.add(position,task);
+        }finish();
+
+
+
     }
 
     public void onCancel(View view) {
